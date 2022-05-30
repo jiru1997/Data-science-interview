@@ -9,5 +9,5 @@
   * numpy
   * python_Excel
 - #### `2.` deep learning
-
+  * tensorflow
 
