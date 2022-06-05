@@ -7,7 +7,7 @@
   * pandas
   * matplotlib
   * numpy
-  * python_Excel
+  * openpyxl
 - #### `2.` deep learning
   * tensorflow
 
