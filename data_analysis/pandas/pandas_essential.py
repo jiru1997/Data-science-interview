@@ -23,7 +23,7 @@ data.mean(axis = 0) #列数量不变，行发生改变
 data.to_excel('', index = False)
 
 #------------------------------------------------------------------------------------------------------------------------------------#
-#dataframe / series
+#dataframe(二维字典，column的名字作为key) / series(一维字典)
 series1 = pandas.Series([1, 2]);
 series1 = pandas.Series([1, 2], index = ['row1', 'row2']);
 series1 = pandas.Series(dict);
@@ -36,11 +36,13 @@ data = {
 }
 dataframe1 = pandas.Dataframe(data)
 
+#iloc是按照行数取值，而loc按着index名取值
 dataframe1['col1'] 	 #col
 dataframe1.loc[1:2]  #row
 dataframe1.loc[:, 'col1']
 
 dataframe1.iloc[x, y]
+dataframe1.iloc[x:y]
 dataframe1.iat[x, y]
 
 #------------------------------------------------------------------------------------------------------------------------------------#
@@ -54,6 +56,13 @@ dataframe1.loc[lambda rows: rows['row1'] > 1, :]
 
 #------------------------------------------------------------------------------------------------------------------------------------#
 #data modify
+def func(x):
+	if x['col1'] > 1:
+		return 1
+	else:
+		return 0
+
+dataframe1['col1'] = 1
 dataframe1.loc[:, 'col3'] = dataframe1['col1']
 dataframe1.loc[:, 'col3'] = dataframe1.apply(func, axis = 1)
 
@@ -92,8 +101,32 @@ str.startswith('')
 str.contains('')
 
 #------------------------------------------------------------------------------------------------------------------------------------#
-#plot
-import matplotlib.pyplot as plt 
-%matplotlib inline
+#merge
+dataframe3 = pandas.merge(dataframe1, dataframe2, on = 'col1') 
+dataframe3 = pandas.merge(dataframe1, dataframe2, left_on = 'col1', right_on = 'col2', how = "inner/left/right/outer")
 
-data.col.value_counts().plot(kind='line', color='maroon', figsize=(1, 2));
+#------------------------------------------------------------------------------------------------------------------------------------#
+#concat / append
+pandas.concat([dataframe1, dataframe2], ignore_index = True)
+dataframe1.append(dataframe2, ignore_index = True)
+
+pandas.concat(
+	[pandas.Dataframe([i], columns = 'A') for i in range(5)],
+	ignore_index = True
+)
+
+#------------------------------------------------------------------------------------------------------------------------------------#
+#groupby
+dataframe1.groupby('col1', as_index = False).sum()
+dataframe1.groupby('col1').agg([numpy.sum, numpy.mean])
+
+group = dataframe1.groupby('col1')
+for name, gro in group:
+	print(name)
+	print(gro)
+
+group.get_group('col1')
+
+
+
+
