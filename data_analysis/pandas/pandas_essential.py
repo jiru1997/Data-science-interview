@@ -18,7 +18,7 @@ data.set_index('col1', inplace = True)
 data.reset_index()
 data.drop('col1', axis = 1)
 data.drop(1, axis = 0)
-data.mean(axis = 0) #列数量不变，行发生改变
+data.mean(axis = 0) #列数量不变，行发生改变, 每一个传入的参数都是一列
 
 data.to_excel('', index = False)
 
@@ -48,11 +48,16 @@ dataframe1.iat[x, y]
 #------------------------------------------------------------------------------------------------------------------------------------#
 #data search
 dataframe1.loc['row1', 'col1']
-dataframe1.loc['row1', ['col1', 'col2']]
+dataframe1.loc[('row1', 'row2'), :]      #多级索引
+dataframe1.loc['row1', ['col1', 'col2']] #同级索引
 dataframe1.loc['row1':'row2', 'col1']
 dataframe1.loc[dataframe1['row1'] < 2, :] #返回符合条件的行的所有列
 dataframe1.loc[(dataframe1['row1'] < 2) & (dataframe1['row1'] > 3), :]
 dataframe1.loc[lambda rows: rows['row1'] > 1, :]
+
+dataframe1.loc[('qualcomm', ['10-02', '10-03']), 'stock']
+                    |                ｜             ｜
+                一级索引值          二级索引值        对应列
 
 #------------------------------------------------------------------------------------------------------------------------------------#
 #data modify
@@ -127,6 +132,13 @@ for name, gro in group:
 
 group.get_group('col1')
 
+#------------------------------------------------------------------------------------------------------------------------------------#
+#map / apply
+dataframe1['col2'] = dataframe1['col1'].map(dict)
+dataframe1['col2'] = dataframe1['col1'].map(lambda x : dict[x])
+dataframe1['col2'] = dataframe1['col1'].apply(lambda x : dict[x])
+dataframe1['col2'] = dataframe1.apply(lambda x : dict[x['col1']], axis = 1)
+dataframe1.applymap(lambda x : int(x))
 
 
 
